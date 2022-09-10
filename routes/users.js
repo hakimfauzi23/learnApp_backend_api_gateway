@@ -1,9 +1,15 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const usersHandler = require("./handler/users");
+const verifyToken = require("../middlewares/verifyToken");
+const verifyRole = require("../middlewares/verifyRole");
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.post("/register", usersHandler.register);
+router.post("/login", usersHandler.login);
+router.put("/", verifyToken, usersHandler.update);
+router.get("/get-user-profile", verifyToken, usersHandler.getUserProfile);
+router.get("/", verifyRole, usersHandler.getUsers);
+router.get("/:id", verifyRole, usersHandler.getUser);
+router.post("/logout", verifyToken, usersHandler.logout);
 
 module.exports = router;
