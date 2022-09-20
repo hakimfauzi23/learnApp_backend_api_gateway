@@ -11,11 +11,14 @@ const mediaRouter = require("./routes/media");
 const ordersRouter = require("./routes/orders");
 const paymentsRouter = require("./routes/payments");
 const refreshTokensRouter = require("./routes/refreshTokens");
-const mentorsRouter = require('./routes/mentors')
-const chaptersRouter = require('./routes/chapters')
-const lessonsRouter = require('./routes/lessons')
+const mentorsRouter = require("./routes/mentors");
+const chaptersRouter = require("./routes/chapters");
+const lessonsRouter = require("./routes/lessons");
+const imageCoursesRouter = require("./routes/imageCourses");
+const myCoursesRouter = require("./routes/myCourses");
 
 const verifyToken = require("./middlewares/verifyToken");
+const verifyRole = require("./middlewares/verifyRole");
 
 const app = express();
 
@@ -35,5 +38,7 @@ app.use("/refresh-tokens", refreshTokensRouter);
 app.use("/mentors", mentorsRouter);
 app.use("/chapters", chaptersRouter);
 app.use("/lessons", lessonsRouter);
+app.use("/image-courses", verifyRole, imageCoursesRouter);
+app.use("/my-courses", verifyToken, myCoursesRouter);
 
 module.exports = app;
