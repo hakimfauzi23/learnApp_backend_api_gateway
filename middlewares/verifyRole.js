@@ -1,20 +1,15 @@
-const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = process.env;
-
-module.exports = async (req, res, next) => {
-  const token = req.headers.authorization;
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ message: err.message });
+module.exports = (...roles) => {
+  return (req, res, next) => {
+    const role = req.user.data.role;
+    if (!roles.includes(role)) {
+      return res
+        .status(405)
+        .json({
+          status: 'error',
+          message: 'you dont have permission'
+        })
     }
 
-    if (decoded.data.role != "admin") {
-      return res.status(401).json({
-        message: "unauthorized action",
-      });
-    }
-
-    req.user = decoded;
     return next();
-  });
-};
+  }
+}

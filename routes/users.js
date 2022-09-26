@@ -8,8 +8,8 @@ router.post("/register", usersHandler.register);
 router.post("/login", usersHandler.login);
 router.put("/", verifyToken, usersHandler.update);
 router.get("/get-user-profile", verifyToken, usersHandler.getUserProfile);
-router.get("/", verifyRole, usersHandler.getUsers);
-router.get("/:id", verifyRole, usersHandler.getUser);
+router.get("/", verifyToken, verifyRole("admin"), usersHandler.getUsers);
+router.get("/:id", usersHandler.getUser);
 router.post("/logout", verifyToken, usersHandler.logout);
 
 module.exports = router;

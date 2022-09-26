@@ -16,7 +16,7 @@ const imageCoursesRouter = require("./routes/imageCourses");
 const myCoursesRouter = require("./routes/myCourses");
 const reviewsRouter = require("./routes/reviews");
 const webhookRouter = require("./routes/webhook");
-const orderPaymentRouter = require("./routes/orderPayments");
+const orderPaymentsRouter = require("./routes/orderPayments");
 
 const verifyToken = require("./middlewares/verifyToken");
 const verifyRole = require("./middlewares/verifyRole");
@@ -30,17 +30,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/courses", verifyToken, coursesRouter);
-app.use("/media", mediaRouter);
-app.use("/refresh-tokens", refreshTokensRouter);
-app.use("/mentors", mentorsRouter);
-app.use("/chapters", chaptersRouter);
-app.use("/lessons", lessonsRouter);
-app.use("/image-courses", verifyRole, imageCoursesRouter);
-app.use("/my-courses", verifyToken, myCoursesRouter);
-app.use("/reviews", verifyToken, reviewsRouter);
-app.use("/webhook", webhookRouter);
-app.use("/orders", verifyToken, orderPaymentRouter);
-
+app.use('/users', usersRouter);
+app.use('/courses', coursesRouter);
+app.use('/chapters', verifyToken, verifyRole('admin'), chaptersRouter);
+app.use('/lessons', verifyToken, verifyRole('admin'), lessonsRouter);
+app.use('/media', verifyToken, verifyRole('admin', 'student'), mediaRouter);
+app.use('/orders', verifyToken, verifyRole('admin', 'student'), orderPaymentsRouter);
+app.use('/refresh-tokens', refreshTokensRouter);
+app.use('/mentors', verifyToken, verifyRole('admin'), mentorsRouter);
+app.use('/image-courses', verifyToken, verifyRole('admin'), imageCoursesRouter);
+app.use('/my-courses', verifyToken, verifyRole('admin', 'student'), myCoursesRouter);
+app.use('/reviews', verifyToken, verifyRole('admin', 'student'), reviewsRouter);
+app.use('/webhook', webhookRouter);
 module.exports = app;

@@ -5,8 +5,8 @@ const verifyRole = require("../middlewares/verifyRole");
 
 router.get("/", chaptersHandler.getAll);
 router.get("/:id", chaptersHandler.get);
-router.post("/", verifyRole, chaptersHandler.create);
-router.put("/:id", verifyRole, chaptersHandler.update);
-router.delete("/:id", verifyRole, chaptersHandler.destroy);
+router.post("/", verifyRole('admin'), chaptersHandler.create);
+router.put("/:id", verifyRole('admin'), chaptersHandler.update);
+router.delete("/:id", verifyRole('admin'), chaptersHandler.destroy);
 
 module.exports = router;
